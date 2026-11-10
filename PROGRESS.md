@@ -17,9 +17,9 @@
 
 ## Точний наступний крок
 
-Оцифрувати маршрут 5: подивитися `data/raw/6841/6841_5.jpg`, додати в `tools/routes-6841.mjs`, далі `node tools/routes-6841.mjs 5 && npx tsx tools/build-route.ts 6841_5 && npx tsx tools/preview-route.ts 6841_5`, потім `npx tsx tools/build-index.ts`, коміт, push.
+Оцифрувати маршрут 6: подивитися `data/raw/6841/6841_6.jpg`, додати в `tools/routes-6841.mjs`, далі `node tools/routes-6841.mjs 6 && npx tsx tools/build-route.ts 6841_6 && npx tsx tools/preview-route.ts 6841_6`, потім `npx tsx tools/build-index.ts`, коміт, push.
 
-## Маршрути (3 verified / 1 чернетка / 16 не почато)
+## Маршрути (3 verified / 2 чернетки / 15 не почато)
 
 | № | Стан | Примітка |
 |---|---|---|
@@ -27,7 +27,7 @@
 | 2 | чернетка | 11,3 км проти 16 — див. docs/REVIEW.md |
 | 3 | verified | 11,5 км проти 14, форма збігається |
 | 4 | verified | 7,3 км (офіційно 8) |
-| 5 | не почато | |
+| 5 | чернетка | 10,5 км проти 14, форма збігається — див. docs/REVIEW.md |
 | 6 | не почато | |
 | 7 | не почато | |
 | 8 | не почато | |
