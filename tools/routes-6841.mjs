@@ -1,0 +1,108 @@
+// Оцифрування маршрутів ТСЦ 6841: генерує data/routes-src/6841_N.yaml.
+// Спільні ділянки (виїзд із ТСЦ, поїздка Волочиською тощо) описані один раз.
+// Використання: node tools/routes-6841.mjs [N ...]   (без аргументів — усі описані)
+import { writeFileSync } from 'node:fs';
+
+const CAT_ALL = 'B, C1, C, D1, D, BE, C1E, CE, D1E, DE';
+const CAT_NO_C = 'B, C1, D1, D, BE, C1E, D1E, DE';
+const CAT_B_D = 'B, D1, D, BE, D1E, DE';
+
+// p(lat, lng, note, uturn?)
+const p = (lat, lng, note, uturn = false) => ({ lat, lng, note, uturn });
+
+const START = p(49.43127, 26.945348, 'старт, ТСЦ');
+const FINISH = p(49.43127, 26.945348, 'фініш, ТСЦ');
+
+// Волочиська до кінця вулиці й назад до перехрестя із Західно-Окружною.
+const VOLOCHYSKA_LOOP = [
+  p(49.437036, 26.94122, 'Волочиська, на захід'),
+  p(49.443684, 26.921766, 'Волочиська'),
+  p(49.449776, 26.908293, 'кінець Волочиської, розворот', true),
+  p(49.443684, 26.921766, 'Волочиська, назад'),
+  p(49.437036, 26.94122, 'Волочиська'),
+  p(49.430986, 26.943806, 'перехрестя Волочиська / Західно-Окружна'),
+];
+const ZO_SOUTH = p(49.423674, 26.939128, 'Західно-Окружна, на південь');
+const ZO_NORTH = p(49.423674, 26.939128, 'Західно-Окружна, на північ');
+const RING_LVIVSKE_SOUTH = p(49.412342, 26.938468, 'кільце з Львівським шосе (південний бік)');
+
+export const ROUTES = {
+  1: {
+    category: CAT_NO_C,
+    km: 17,
+    verified: true,
+    streets: [
+      'вул. Західно-Окружна', 'вул. Волочиська', 'вул. Західно-Окружна', 'вул. Тернопільська',
+      "вул. Кам'янецька", 'вул. Інститутська', 'вул. Молодіжна', 'вул. Тернопільська', 'вул. Західно-Окружна',
+    ],
+    waypoints: [
+      START, ...VOLOCHYSKA_LOOP, ZO_SOUTH,
+      p(49.407521, 26.95017, 'Тернопільська / Молодіжна, прямо'),
+      p(49.404182, 26.964018, "Тернопільська / Кам'янецька, ліворуч"),
+      p(49.406156, 26.966371, "Кам'янецька / Інститутська, ліворуч"),
+      p(49.411271, 26.953866, 'Інститутська / Молодіжна, ліворуч'),
+      p(49.407521, 26.95017, 'Молодіжна / Тернопільська, праворуч'),
+      ZO_NORTH, FINISH,
+    ],
+  },
+  2: {
+    category: CAT_NO_C,
+    km: 16,
+    verified: false,
+    streets: [
+      'вул. Західно-Окружна', 'вул. Вокзальна', 'вул. Зенітна', 'вул. Курчатова (нині Романа Шухевича)',
+      'вул. Проскурівського Підпілля', 'вул. Вокзальна', 'вул. Західно-Окружна',
+    ],
+    waypoints: [
+      START,
+      p(49.438725, 26.942272, 'Вокзальна, на північний захід'),
+      p(49.440788, 26.944937, 'Зенітна / Шухевича, праворуч'),
+      p(49.437013, 26.954996, 'Шухевича'),
+      p(49.43441, 26.961113, 'Шухевича / Проскурівського підпілля, праворуч'),
+      p(49.426253, 26.96357, 'Проскурівського підпілля / Вокзальна, праворуч'),
+      p(49.431254, 26.954765, 'Вокзальна, на північний захід'),
+      ZO_SOUTH, RING_LVIVSKE_SOUTH, ZO_NORTH, FINISH,
+    ],
+  },
+  3: {
+    category: CAT_ALL,
+    km: 14,
+    verified: true,
+    notes: 'Форма збігається зі схемою; офіційні 14 км не сходяться з геометрією (≈11,5 км).',
+    streets: ['вул. Західно-Окружна', 'вул. Волочиська', 'вул. Західно-Окружна'],
+    waypoints: [START, ...VOLOCHYSKA_LOOP, ZO_SOUTH, RING_LVIVSKE_SOUTH, ZO_NORTH, FINISH],
+  },
+  4: {
+    category: CAT_ALL,
+    km: 8,
+    verified: true,
+    streets: ['вул. Західно-Окружна', 'вул. Волочиська', 'вул. Західно-Окружна'],
+    waypoints: [START, ...VOLOCHYSKA_LOOP, FINISH],
+  },
+};
+
+const q = (s) => JSON.stringify(s);
+const only = process.argv.slice(2).map(Number);
+for (const [n, r] of Object.entries(ROUTES)) {
+  if (only.length && !only.includes(Number(n))) continue;
+  const lines = [
+    `id: "6841_${n}"`,
+    `number: ${n}`,
+    `name: "Маршрут №${n}"`,
+    `category: ${q(r.category)}`,
+    `sourceImage: "6841_${n}.jpg"`,
+    `officialLengthKm: ${r.km}`,
+    `verified: ${r.verified}`,
+    ...(r.notes ? [`notes: ${q(r.notes)}`] : []),
+    'streets:',
+    ...r.streets.map((s) => `  - ${q(s)}`),
+    'waypoints:',
+    ...r.waypoints.map(
+      (w) =>
+        `  - { lat: ${w.lat.toFixed(6)}, lng: ${w.lng.toFixed(6)}${w.uturn ? ', uturn: true' : ''}, note: ${q(w.note)} }`,
+    ),
+  ];
+  writeFileSync(`data/routes-src/6841_${n}.yaml`, lines.join('\n') + '\n');
+  console.log(`6841_${n}.yaml: ${r.waypoints.length} точок`);
+}
+void CAT_B_D;

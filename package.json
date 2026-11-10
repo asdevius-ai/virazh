@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen-icons": "node scripts/gen-icons.mjs",
+    "qa:shots": "node scripts/qa-shots.mjs",
+    "qa:prod": "node scripts/qa-prod.mjs"
   },
   "dependencies": {
     "@turf/along": "^7.4.0",
