@@ -1,0 +1,11 @@
+[
+  { "type": "crossing", "pdrCode": "5.38.1", "label": "Пішохідний перехід", "icon": "crossing" },
+  { "type": "traffic_signals", "pdrCode": null, "label": "Світлофор", "icon": "traffic_signals" },
+  { "type": "give_way", "pdrCode": "2.1", "label": "Дати дорогу", "icon": "give_way" },
+  { "type": "stop", "pdrCode": "2.2", "label": "Проїзд без зупинки заборонено", "icon": "stop" },
+  { "type": "roundabout", "pdrCode": "4.10", "label": "Круговий рух", "icon": "roundabout" },
+  { "type": "level_crossing", "pdrCode": "1.28", "label": "Залізничний переїзд без шлагбаума", "icon": "level_crossing" },
+  { "type": "speed_bump", "pdrCode": "1.11", "label": "Штучна нерівність", "icon": "speed_bump" },
+  { "type": "bus_stop", "pdrCode": "5.45.1", "label": "Пункт зупинки автобуса", "icon": "bus_stop" },
+  { "type": "sign", "pdrCode": null, "label": "Дорожній знак", "icon": "sign" }
+]
