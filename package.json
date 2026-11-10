@@ -1,0 +1,33 @@
+{
+  "name": "virazh",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@turf/along": "^7.4.0",
+    "@turf/bearing": "^7.4.0",
+    "@turf/distance": "^7.4.0",
+    "@turf/helpers": "^7.4.0",
+    "@turf/length": "^7.4.0",
+    "@turf/line-slice": "^7.4.0",
+    "@turf/nearest-point-on-line": "^7.4.0",
+    "maplibre-gl": "^6.17.0"
+  },
+  "devDependencies": {
+    "@turf/simplify": "^7.4.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^26.6.6",
+    "js-yaml": "^5.5.0",
+    "playwright": "^1.65.0",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.7"
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+data/cache/
+data/raw/
+data/osm/
+data/preview/
+ref/
+.claude/usage-state.json
+.claude/usage-guard-fired.json
+.claude/settings.local.json
+*.log
+.DS_Store
+test-results/
+playwright-report/
