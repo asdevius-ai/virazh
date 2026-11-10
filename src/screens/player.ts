@@ -321,7 +321,9 @@ function startPlayer(root: HTMLElement, route: Route): () => void {
   // Скраббер
   const scrubTo = (e: PointerEvent): void => {
     const r = scrub.getBoundingClientRect();
-    seek(clamp((e.clientX - r.left) / r.width, 0, 1) * L);
+    // Тап біля самого краю доводить до початку/фінішу, щоб не лишалось «99,7%».
+    const f = clamp((e.clientX - r.left) / r.width, 0, 1);
+    seek((f > 0.985 ? 1 : f < 0.015 ? 0 : f) * L);
   };
   scrub.addEventListener('pointerdown', (e) => {
     dragging = true;
@@ -371,7 +373,14 @@ function startPlayer(root: HTMLElement, route: Route): () => void {
     if (si !== lastStreetIdx) {
       lastStreetIdx = si;
       const name = streets[si]?.name;
-      streetName.textContent = name ? name : 'Проїзд';
+      // Безіменні ділянки: перша — виїзд із ТСЦ, остання — заїзд, решта — з'їзди розв'язок.
+      streetName.textContent = name
+        ? name
+        : si === 0
+          ? 'Виїзд із ТСЦ'
+          : si === streets.length - 1
+            ? 'Заїзд до ТСЦ'
+            : 'З’їзд';
     }
 
     const step = Math.floor(s / 10);
