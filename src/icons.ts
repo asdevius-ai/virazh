@@ -80,21 +80,14 @@ export function signImage(type: PoiType): Promise<HTMLImageElement> {
 export const POI_TYPES = Object.keys(SIGNS) as PoiType[];
 
 /** Темний шеврон для стрілок напрямку вздовж лінії (дивиться вправо, +x). */
-export function arrowImageData(): ImageData {
-  const s = 32;
-  const c = document.createElement('canvas');
-  c.width = s;
-  c.height = s;
-  const g = c.getContext('2d')!;
-  g.fillStyle = '#0B1A17';
-  g.beginPath();
-  g.moveTo(9, 7);
-  g.lineTo(24, 16);
-  g.lineTo(9, 25);
-  g.lineTo(13.5, 16);
-  g.closePath();
-  g.fill();
-  return g.getImageData(0, 0, s, s);
+export function arrowImage(): Promise<HTMLImageElement> {
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="48" height="48"><path d="M2 3 L14 8 L2 13 L5 8Z" fill="#031210" stroke="#031210" stroke-width="0.6" stroke-linejoin="round"/></svg>';
+  return new Promise((resolve, reject) => {
+    const img = new Image(48, 48);
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('arrow'));
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
 }
 
 /** Машинка, вид зверху, ніс вгору. */

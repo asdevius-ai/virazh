@@ -1,0 +1,24 @@
+// QA лінії маршруту на реальних даних. node scripts/qa-line.mjs [routeNum]
+import { chromium } from 'playwright';
+const base = 'http://localhost:5173/virazh/';
+const num = process.argv[2] ?? '1';
+const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
+const page = await ctx.newPage();
+const errs = [];
+page.on('console', (m) => m.type() === 'error' && errs.push(m.text().slice(0, 200)));
+page.on('pageerror', (e) => errs.push(e.message));
+await page.goto(base + '#/center/6841/route/' + num);
+await page.waitForFunction(() => window.__virazh?.map?.loaded(), null, { timeout: 30000 });
+await page.waitForTimeout(2500);
+const shot = (n) => page.screenshot({ path: `data/preview/qa-b/line-${num}-${n}.png` });
+await shot('a-start');
+await page.evaluate(() => { window.__virazh.setSpeed(4); window.__virazh.play(); });
+await page.waitForTimeout(8000);
+await shot('b-8s');
+const box = await page.locator('.scrub').boundingBox();
+await page.mouse.click(box.x + box.width * 0.985, box.y + box.height / 2);
+await page.waitForTimeout(2500);
+await shot('c-end');
+console.log('errors', errs.length ? errs : 'none');
+await browser.close();

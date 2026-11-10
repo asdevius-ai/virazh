@@ -1,10 +1,10 @@
 import type { Map as MlMap, ExpressionSpecification } from 'maplibre-gl';
 import type { Route, PoiType } from '../types';
-import { POI_TYPES, arrowImageData, signImage } from '../icons';
+import { POI_TYPES, arrowImage, signImage } from '../icons';
 
 export const STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
 export const ROUTE_COLOR = '#2DD4A7';
-export const ROUTE_PASSED = '#17594A';
+export const ROUTE_PASSED = '#1B7A64';
 
 type Paint = Record<string, unknown>;
 
@@ -77,8 +77,10 @@ export function applyPalette(map: MlMap): void {
   }
 }
 
+/** Лінія маршруту — над дорогами та їхніми підписами, під назвами місць/кордонами. */
 function firstSymbolId(map: MlMap): string | undefined {
-  return map.getStyle().layers.find((l) => l.type === 'symbol')?.id;
+  const layers = map.getStyle().layers;
+  return (layers.find((l) => l.id.startsWith('place_')) ?? layers.find((l) => l.id.startsWith('boundary_')))?.id;
 }
 
 export const POI_SOURCE = 'pois';
@@ -94,16 +96,18 @@ export async function addRouteLayers(map: MlMap, route: Route): Promise<void> {
     data: { type: 'Feature', properties: {}, geometry: route.geometry },
   });
 
-  const width = (k: number): ExpressionSpecification => [
+  const width = (extra: number): ExpressionSpecification => [
     'interpolate',
-    ['exponential', 1.6],
+    ['linear'],
     ['zoom'],
     11,
-    2 * k,
-    15,
-    6 * k,
-    18,
-    14 * k,
+    2 + extra * 0.4,
+    14,
+    4.5 + extra * 0.6,
+    17,
+    8 + extra,
+    19,
+    15 + extra,
   ];
 
   map.addLayer(
@@ -112,7 +116,7 @@ export async function addRouteLayers(map: MlMap, route: Route): Promise<void> {
       type: 'line',
       source: 'route',
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-color': '#07110F', 'line-width': width(1.55), 'line-opacity': 0.95 },
+      paint: { 'line-color': '#07110F', 'line-width': width(4), 'line-opacity': 0.95 },
     },
     before,
   );
@@ -122,12 +126,12 @@ export async function addRouteLayers(map: MlMap, route: Route): Promise<void> {
       type: 'line',
       source: 'route',
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-width': width(1), 'line-gradient': gradientExpr(0) },
+      paint: { 'line-width': width(0), 'line-gradient': gradientExpr(0) },
     },
     before,
   );
 
-  map.addImage('arrow', arrowImageData(), { pixelRatio: 2 });
+  map.addImage('virazh-arrow', await arrowImage(), { pixelRatio: 6 });
   map.addLayer(
     {
       id: 'route-arrows',
@@ -136,13 +140,13 @@ export async function addRouteLayers(map: MlMap, route: Route): Promise<void> {
       minzoom: 12,
       layout: {
         'symbol-placement': 'line',
-        'symbol-spacing': 70,
-        'icon-image': 'arrow',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.6, 16, 1, 19, 1.3],
+        'symbol-spacing': 60,
+        'icon-image': 'virazh-arrow',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.6, 14, 0.8, 17, 1.15, 19, 1.8],
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
         'icon-rotation-alignment': 'map',
-        'icon-pitch-alignment': 'map',
+        'icon-pitch-alignment': 'viewport',
       },
     },
     before,

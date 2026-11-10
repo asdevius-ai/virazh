@@ -1,6 +1,6 @@
-// QA production-збірки (vite preview) та взаємодій. node scripts/qa-prod.mjs [baseUrl]
+// QA взаємодій (потрібен window.__virazh, тобто dev-сервер). node scripts/qa-prod.mjs [baseUrl]
 import { chromium } from 'playwright';
-const base = process.argv[2] ?? 'http://localhost:4173/virazh/';
+const base = process.argv[2] ?? 'http://localhost:5173/virazh/';
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
 const page = await ctx.newPage();

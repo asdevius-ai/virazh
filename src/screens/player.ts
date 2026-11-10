@@ -161,9 +161,7 @@ function startPlayer(root: HTMLElement, route: Route): () => void {
   map.on('load', () => {
     mapLoaded = true;
     applyPalette(map);
-    void addRouteLayers(map, route).then(() => {
-      void loadSigns(); // прогріваємо довідник (необов'язковий)
-    });
+    void addRouteLayers(map, route);
   });
   map.on('error', () => {
     if (!mapLoaded) mapError.classList.remove('hidden');
@@ -173,13 +171,16 @@ function startPlayer(root: HTMLElement, route: Route): () => void {
   // Підпис знака по тапу.
   const poiById = new Map<string, RoutePoi>(route.pois.map((p) => [p.id, p]));
   let popup: maplibregl.Popup | null = null;
+  const signs = new Map<string, string | null>();
+  void loadSigns().then((m) => m.forEach((v, k) => signs.set(k, v.pdrCode)));
   map.on('click', POI_LAYER, (e) => {
     const f = e.features?.[0];
     if (!f) return;
     const poi = poiById.get(String(f.properties?.['id']));
     if (!poi) return;
     popup?.remove();
-    const html = h('div', { class: 'poi-pop' }, h('b', null, poi.pdrCode ?? ''), poi.pdrCode ? ' ' : '', poi.label);
+    const code = poi.pdrCode ?? signs.get(poi.type) ?? '';
+    const html = h('div', { class: 'poi-pop' }, h('b', null, code), code ? ' ' : '', poi.label);
     popup = new maplibregl.Popup({ closeButton: false, offset: 26, className: 'virazh-popup', maxWidth: '240px' })
       .setLngLat(poi.coord)
       .setDOMContent(html)
@@ -512,7 +513,7 @@ function startPlayer(root: HTMLElement, route: Route): () => void {
   raf = requestAnimationFrame(frame);
 
   // Для тестів/відлагодження.
-  (window as unknown as { __virazh?: unknown }).__virazh = {
+  if (import.meta.env.DEV) (window as unknown as { __virazh?: unknown }).__virazh = {
     get s() {
       return s;
     },
