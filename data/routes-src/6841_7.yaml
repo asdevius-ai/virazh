@@ -4,7 +4,8 @@ name: "Маршрут №7"
 category: "B, D1, D, BE, D1E, DE"
 sourceImage: "6841_7.jpg"
 officialLengthKm: 18
-verified: false
+verified: true
+notes: "Порядок вулиць збігається зі схемою; офіційні 18 км не сходяться з геометрією (≈13,9 км)."
 streets:
   - "вул. Західно-Окружна"
   - "вул. Вокзальна"

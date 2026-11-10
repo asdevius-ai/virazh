@@ -4,7 +4,8 @@ name: "Маршрут №5"
 category: "B, D1, D, BE, D1E, DE"
 sourceImage: "6841_5.jpg"
 officialLengthKm: 14
-verified: false
+verified: true
+notes: "Форма збігається зі схемою; офіційні 14 км не сходяться з геометрією (≈10,5 км)."
 streets:
   - "вул. Західно-Окружна"
   - "Львівське шосе"

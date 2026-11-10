@@ -4,7 +4,8 @@ name: "Маршрут №6"
 category: "B, D1, D, BE, D1E, DE"
 sourceImage: "6841_6.jpg"
 officialLengthKm: 16
-verified: false
+verified: true
+notes: "Порядок вулиць збігається зі схемою; офіційні 16 км не сходяться з геометрією (≈11,2 км)."
 streets:
   - "вул. Західно-Окружна"
   - "вул. Вокзальна"

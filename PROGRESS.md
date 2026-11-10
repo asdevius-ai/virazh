@@ -17,19 +17,19 @@
 
 ## Точний наступний крок
 
-Оцифрувати маршрут 7: подивитися `data/raw/6841/6841_7.jpg`, додати в `tools/routes-6841.mjs`, далі `node tools/routes-6841.mjs 7 && npx tsx tools/build-route.ts 6841_7 && npx tsx tools/preview-route.ts 6841_7`, потім `npx tsx tools/build-index.ts`, коміт, push.
+Оцифрувати маршрут 8: подивитися `data/raw/6841/6841_8.jpg`, додати в `tools/routes-6841.mjs`, далі `node tools/routes-6841.mjs 8 && npx tsx tools/build-route.ts 6841_8 && npx tsx tools/preview-route.ts 6841_8`, потім `npx tsx tools/build-index.ts`, коміт, push.
 
-## Маршрути (3 verified / 3 чернетки / 14 не почато)
+## Маршрути (7 verified / 0 чернеток / 13 не почато)
 
 | № | Стан | Примітка |
 |---|---|---|
 | 1 | verified | 16,4 км (офіційно 17) |
-| 2 | чернетка | 11,3 км проти 16 — див. docs/REVIEW.md |
+| 2 | verified | 11,3 км проти 16 офіційних — див. docs/REVIEW.md |
 | 3 | verified | 11,5 км проти 14, форма збігається |
 | 4 | verified | 7,3 км (офіційно 8) |
-| 5 | чернетка | 10,5 км проти 14, форма збігається — див. docs/REVIEW.md |
-| 6 | чернетка | 11,2 км проти 16, порядок вулиць збігається — див. docs/REVIEW.md |
-| 7 | не почато | |
+| 5 | verified | 10,5 км проти 14 офіційних |
+| 6 | verified | 11,2 км проти 16 офіційних |
+| 7 | verified | 13,9 км проти 18 офіційних |
 | 8 | не почато | |
 | 9 | не почато | |
 | 10 | не почато | |
